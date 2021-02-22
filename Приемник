@@ -1,0 +1,54 @@
+#include <SPI.h>
+#include <RF24.h>
+#include "Wire.h"
+float date[6];
+RF24 radio(10,9);
+float angleX = 0;
+float angleY = 0;
+float angleZ = 0;
+float gz;
+float X;
+float Y;
+float ygX;
+float ygY;
+float Alt;
+int Time;
+
+void setup() {
+Serial.begin(115200);
+
+Wire.begin();
+
+radio.begin(); 
+radio.setChannel(5); 
+radio.setDataRate (RF24_1MBPS); 
+radio.setPALevel (RF24_PA_HIGH); 
+radio.openReadingPipe (1, 0x1234567890LL);
+radio.startListening ();
+}
+void loop(){
+
+radio.read(&date, 32);
+angleX=date[0];
+angleY=date[1];
+angleZ=date[2];
+gz=date[3];
+Alt=date[4];
+Time=date[5];
+
+Serial.print(" Угол отклонения x");
+Serial.print(angleX);
+Serial.print("Угол отклонения y ");
+Serial.print(angleY);
+Serial.print(" Угол отклонения z");
+Serial.print(angleZ);
+Serial.println(" Ускорение по z");
+Serial.print(gz);
+Serial.print("Высота ");
+Serial.print(Alt);
+Serial.print("Время замеров ");
+Serial.print(Time);
+
+
+
+}
